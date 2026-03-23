@@ -187,11 +187,10 @@ function showSuccess(el, issueUrl) {
         el.appendChild(link);
     }
 
-    const backBtn = document.createElement('a');
-    backBtn.href = '#/';
-    backBtn.className = 'btn btn-secondary';
-    backBtn.textContent = 'Back to Home';
-    backBtn.style.marginTop = 'var(--space-4)';
-    backBtn.style.display = 'inline-flex';
-    el.appendChild(backBtn);
+    const backLink = document.createElement('a');
+    backLink.href = '#/';
+    backLink.textContent = 'Back to Home';
+    backLink.style.marginTop = 'var(--space-4)';
+    backLink.style.display = 'inline-block';
+    el.appendChild(backLink);
 }
