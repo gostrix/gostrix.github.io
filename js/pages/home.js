@@ -85,20 +85,28 @@ async function doSearch(query, container) {
             const item = document.createElement('div');
             item.className = 'model-item';
             item.addEventListener('click', () => {
-                location.hash = `#/brands/${r.brand_id}/${encodeURIComponent(r.model)}`;
+                if (r.model) {
+                    location.hash = `#/brands/${r.brand_id}/${encodeURIComponent(r.model)}`;
+                } else {
+                    location.hash = `#/brands/${r.brand_id}`;
+                }
             });
 
             const info = document.createElement('div');
             const name = document.createElement('span');
             name.className = 'model-name';
-            name.textContent = r.model;
 
-            const brand = document.createElement('span');
-            brand.style.cssText = 'color: var(--text-tertiary); font-size: var(--text-xs); margin-left: var(--space-2);';
-            brand.textContent = r.brand;
+            if (r.model) {
+                const brandSpan = document.createElement('span');
+                brandSpan.style.cssText = 'color: var(--text-tertiary);';
+                brandSpan.textContent = r.brand + ': ';
+                name.appendChild(brandSpan);
+                name.appendChild(document.createTextNode(r.model));
+            } else {
+                name.textContent = r.brand;
+            }
 
             info.appendChild(name);
-            info.appendChild(brand);
 
             const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
             arrow.setAttribute('class', 'model-arrow');
