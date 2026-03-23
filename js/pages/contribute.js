@@ -40,28 +40,7 @@ export async function renderContribute(container) {
     const row = document.createElement('div');
     row.className = 'form-row';
 
-    const protoGroup = document.createElement('div');
-    protoGroup.className = 'form-group';
-    const protoLabel = document.createElement('label');
-    protoLabel.className = 'label';
-    protoLabel.textContent = 'Protocol ';
-    const protoReq = document.createElement('span');
-    protoReq.className = 'required';
-    protoReq.textContent = '*';
-    protoLabel.appendChild(protoReq);
-    protoGroup.appendChild(protoLabel);
-    const protoSelect = document.createElement('select');
-    protoSelect.className = 'input';
-    protoSelect.id = 'contrib-protocol';
-    ['rtsp', 'http', 'https', 'rtsps', 'rtmp', 'mms', 'bubble', 'rtp'].forEach(p => {
-        const opt = document.createElement('option');
-        opt.value = p;
-        opt.textContent = p;
-        if (p === (params.get('protocol') || 'rtsp')) opt.selected = true;
-        protoSelect.appendChild(opt);
-    });
-    protoGroup.appendChild(protoSelect);
-    row.appendChild(protoGroup);
+    row.appendChild(formGroup('Protocol', 'text', 'contrib-protocol', params.get('protocol') || 'rtsp', 'rtsp, http, bubble...', true));
 
     row.appendChild(formGroup('Port', 'number', 'contrib-port', params.get('port') || '554', '554', true));
     form.appendChild(row);
