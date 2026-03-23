@@ -71,7 +71,7 @@ export function buildStreamURL(stream, credentials) {
 
     const hostPort = isDefaultPort(protocol, port) ? ip : `${ip}:${port}`;
 
-    if (username && password && (protocol === 'rtsp' || protocol === 'rtsps')) {
+    if (username && password) {
         return `${protocol}://${username}:${password}@${hostPort}${path}`;
     }
 
