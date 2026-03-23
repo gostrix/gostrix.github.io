@@ -45,6 +45,8 @@ export async function renderContribute(container) {
     row.appendChild(formGroup('Port', 'number', 'contrib-port', params.get('port') || '554', '554', true));
     form.appendChild(row);
 
+    form.appendChild(formGroup('MAC Prefix', 'text', 'contrib-mac', params.get('mac_prefix') || '', 'First 3 octets, e.g. 3C:EF:8C', false));
+
     form.appendChild(formGroup('Comment', 'textarea', 'contrib-comment', '', 'Any additional info (firmware version, etc.)', false));
 
     const submitBtn = document.createElement('button');
@@ -84,6 +86,9 @@ export async function renderContribute(container) {
 
         const model = document.getElementById('contrib-model').value.trim();
         if (model) data.model = model;
+
+        const mac = document.getElementById('contrib-mac').value.trim();
+        if (mac) data.mac_prefix = mac;
 
         const comment = document.getElementById('contrib-comment').value.trim();
         if (comment) data.comment = comment;
