@@ -1,0 +1,41 @@
+/* ===== CONTRIBUTE PAGE ===== */
+.contribute-form {
+    max-width: 540px;
+    margin: 0 auto;
+}
+
+.contribute-success {
+    text-align: center;
+    padding: var(--space-12) 0;
+    animation: fadeIn var(--transition-base);
+}
+
+.contribute-success svg {
+    width: 48px;
+    height: 48px;
+    color: var(--success);
+    margin-bottom: var(--space-4);
+}
+
+.contribute-success h2 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-2);
+    color: var(--text-primary);
+}
+
+.contribute-success p {
+    color: var(--text-secondary);
+    margin-bottom: var(--space-6);
+}
+
+.contribute-success a {
+    color: var(--purple-light);
+}
+
+.contribute-info {
+    font-size: var(--text-xs);
+    color: var(--text-tertiary);
+    text-align: center;
+    margin-top: var(--space-6);
+    line-height: 1.6;
+}
