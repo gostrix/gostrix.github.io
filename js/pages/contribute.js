@@ -47,7 +47,7 @@ export async function renderContribute(container) {
 
     form.appendChild(formGroup('MAC Prefix', 'text', 'contrib-mac', params.get('mac_prefix') || '', 'First 3 octets, e.g. 3C:EF:8C', false));
 
-    form.appendChild(formGroup('Comment', 'textarea', 'contrib-comment', '', 'Any additional info (firmware version, etc.)', false));
+    form.appendChild(formGroup('Comment', 'textarea', 'contrib-comment', params.get('comment') || '', 'Any additional info (firmware version, etc.)', false));
 
     const submitBtn = document.createElement('button');
     submitBtn.type = 'submit';
