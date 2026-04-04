@@ -31,8 +31,12 @@ export async function renderHome(container) {
                 Browse All Brands
             </a>
 
-            <a href="#/contribute" class="btn btn-secondary btn-large">
+            <a href="#/contribute" class="btn btn-secondary btn-large" style="margin-bottom: var(--space-4);">
                 Contribute a Camera
+            </a>
+
+            <a href="demo.html" class="btn btn-secondary btn-large" style="border-color: rgba(245, 158, 11, 0.3); color: #f59e0b;">
+                Try Interactive Demo
             </a>
         </div>
     </div>`;
