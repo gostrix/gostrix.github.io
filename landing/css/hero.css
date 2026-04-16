@@ -89,6 +89,11 @@
     pointer-events: none;
     min-width: 6ch;
     text-align: left;
+    /* Extra clip from the top removes tall glyph ascenders of the
+       word above the visible neighbour (system font metrics leak out
+       a few pixels past the line-box). 0.12em is enough for any
+       capital at our weight/size without eating the visible row. */
+    clip-path: inset(0.12em 0 0 0);
 }
 
 /* Fade overlay is intentionally disabled — neighbors stay fully
@@ -120,7 +125,10 @@
     line-height: var(--line-h);
     color: rgba(255, 255, 255, 0.22);
     white-space: nowrap;
-    transition: color 300ms ease, opacity 300ms ease;
+    /* No transition — .active must paint the gradient the very frame
+       the class toggles, otherwise users occasionally see the newly
+       centered word still rendered white before the color transition
+       catches up. */
 }
 
 .ticker-word.active {
