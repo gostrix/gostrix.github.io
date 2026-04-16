@@ -138,17 +138,35 @@
 }
 
 /* ─── Gif tilt transition — the bridge from hero to story ────── */
+/*
+ * The bridge overlaps the bottom of the hero by a third of its own
+ * height. Negative top margin (equal to 1/3 of min-height) pulls the
+ * whole section up; z-index keeps it above the hero so the frame is
+ * never clipped. The hero's scroll indicator sits behind the frame
+ * as a result — intended: once the user starts scrolling they are
+ * visually bridged straight into the demo.
+ */
 .gif-bridge {
     position: relative;
     min-height: 90vh;
+    margin-top: calc(-30vh + 40px);
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 2rem;
     perspective: 1400px;
-    z-index: 1;
+    z-index: 2;
 }
 
+/*
+ * Two-layer frame:
+ *   .gif-bridge-wrap   — owns the entrance fade/slide (once gif
+ *                        finishes decoding, JS adds .loaded and it
+ *                        animates from translateY(40px) + opacity 0
+ *                        up into place).
+ *   .gif-bridge-frame  — owns the scroll-scrubbed rotateX tilt.
+ * Separation avoids the two transforms fighting for the same property.
+ */
 .gif-bridge-frame {
     width: 100%;
     max-width: 1100px;

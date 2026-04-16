@@ -33,35 +33,97 @@
 }
 
 /* ─── Headline ────────────────────────────────────────────────── */
+/*
+ * "Your [word]" — two halves on one line. The left half "Your" is
+ * static; the right half is a vertical slot-machine ticker that
+ * cycles through words and can be dragged like a dial.
+ *
+ * --line-h is exposed as a CSS custom property because the JS needs
+ * to know the rendered line height to translate the cylinder by
+ * exactly one row at a time. CSS owns typography; JS owns motion.
+ */
 .hero-title {
+    --line-h: clamp(2.5rem, 7.5vw, 6rem);
     font-weight: 700;
-    font-size: clamp(2.5rem, 7.5vw, 6rem);
+    font-size: var(--line-h);
     line-height: 1;
     letter-spacing: -0.045em;
     color: #ffffff;
     margin: 0 0 2rem;
+    /* Flex centers the Label + Ticker pair horizontally and vertically
+       inside the title block, while the title itself is a full-width
+       block so the install pill stacks below it, not beside it. */
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 0.15em;
-}
-
-.hero-title-line {
+    justify-content: center;
+    gap: 0.4ch;
+    width: 100%;
+    /* Manual nudge — the "Your" label reads too far left at the
+       default center; sliding 20px right aligns its Y-cap visually
+       under the topbar owl. */
+    padding-left: 60px;
     opacity: 0;
     transform: translateY(24px);
-    animation: heroLineIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation: heroLineIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
 }
-
-.hero-title-line:nth-child(1) { animation-delay: 0.1s; }
-.hero-title-line:nth-child(2) { animation-delay: 0.25s; }
-.hero-title-line:nth-child(3) { animation-delay: 0.4s; }
 
 @keyframes heroLineIn {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Gradient accent on the middle line ("Your cameras.") */
-.hero-title-accent {
+.ticker-label {
+    color: #ffffff;
+    flex-shrink: 0;
+}
+
+/* ─── Ticker (the slot-machine cylinder) ─────────────────────── */
+/* Display-only — no interactive handlers. Pointer events pass
+   through to the hero so the cursor behaves like normal text. */
+.ticker {
+    position: relative;
+    display: inline-block;
+    height: calc(var(--line-h) * 3);
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    pointer-events: none;
+    min-width: 6ch;
+    text-align: left;
+}
+
+/* Fade overlay is intentionally disabled — neighbors stay fully
+   visible, only dimmed via their own opacity. Element kept in the
+   DOM in case we want to reintroduce a gradient mask later. */
+.ticker-fade {
+    display: none;
+}
+
+.ticker-cylinder {
+    display: block;
+    position: relative;
+    /* Center the currently-active row by offsetting the cylinder by
+       one row height (the active slot is the middle of the three). */
+    transform: translateY(calc(var(--line-h) * -1));
+    transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+}
+
+.ticker-cylinder.dragging {
+    /* While the user is actively dragging, disable the easing so the
+       cylinder sticks to the pointer 1:1. Snap uses a transition again. */
+    transition: none;
+}
+
+.ticker-word {
+    display: block;
+    height: var(--line-h);
+    line-height: var(--line-h);
+    color: rgba(255, 255, 255, 0.22);
+    white-space: nowrap;
+    transition: color 300ms ease, opacity 300ms ease;
+}
+
+.ticker-word.active {
     background: linear-gradient(135deg,
         rgba(var(--purple-4), 1) 0%,
         rgba(var(--purple-1), 1) 60%,
@@ -69,17 +131,7 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-}
-
-/* On wide desktops the three lines lay out as ONE horizontal row.
-   Breakpoint chosen so the full phrase fits without wrapping. */
-@media (min-width: 1280px) {
-    .hero-title {
-        flex-direction: row;
-        justify-content: center;
-        gap: 0.4ch;
-        font-size: clamp(3rem, 5.5vw, 5rem);
-    }
+    color: transparent;
 }
 
 /* ─── Install pill (primary CTA) ──────────────────────────────── */
@@ -157,9 +209,23 @@
     margin: 0 0 3rem;
 }
 
-.hero-compat span {
+/* Each platform word is an anchor to the install section. Keep the
+   link color tied to the accent palette; lift the underline on hover
+   rather than using the default dotted/underscored link look. */
+.hero-compat a {
     color: rgba(var(--purple-3), 1);
     font-weight: 500;
+    text-decoration: none;
+    padding: 0.125rem 0.2rem;
+    border-radius: 4px;
+    transition: color 150ms ease, background 150ms ease;
+}
+
+.hero-compat a:hover,
+.hero-compat a:focus-visible {
+    color: #ffffff;
+    background: rgba(var(--purple-1), 0.18);
+    outline: none;
 }
 
 /* ─── Mouse scroll indicator ──────────────────────────────────── */

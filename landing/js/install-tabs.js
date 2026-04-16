@@ -98,6 +98,30 @@ function apply() {
     }
 }
 
+/*
+ * Activate the install panel whose data-tab attribute matches the
+ * given name. Works in both desktop (tab) and mobile (accordion)
+ * modes — for the mobile accordion we open the chosen panel and
+ * close the rest so the user lands exactly on the right section.
+ */
+function activateTab(name) {
+    var panels = qsa('.install-panel');
+    var tabs = qsa('.install-tab');
+    var targetIdx = -1;
+
+    panels.forEach(function(p, i) {
+        if (p.getAttribute('data-tab') === name) targetIdx = i;
+    });
+    if (targetIdx < 0) return;
+
+    panels.forEach(function(p, i) {
+        p.classList.toggle('active', i === targetIdx);
+    });
+    tabs.forEach(function(t, i) {
+        t.classList.toggle('active', i === targetIdx);
+    });
+}
+
 export function initInstallTabs() {
     apply();
 
@@ -110,5 +134,18 @@ export function initInstallTabs() {
             wasMobile = isMobile;
             apply();
         }
+    });
+
+    // Platform chips in the hero (and anywhere else on the page) can
+    // pre-select a specific install method via data-install-tab. The
+    // browser still scrolls to #install because the link's href
+    // remains a hash anchor — we just also open the right tab.
+    document.addEventListener('click', function(e) {
+        var link = e.target.closest('[data-install-tab]');
+        if (!link) return;
+        var name = link.getAttribute('data-install-tab');
+        // Defer so the hash-scroll happens first; then the panel
+        // becomes active right as the user's view arrives.
+        setTimeout(function() { activateTab(name); }, 0);
     });
 }
