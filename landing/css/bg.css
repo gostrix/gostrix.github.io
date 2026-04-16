@@ -1,0 +1,236 @@
+/*
+ * landing/css/bg.css
+ *
+ * Multi-layer animated background for the landing page.
+ *
+ * Layer stack (z-index from back to front):
+ *   -3  base mesh gradient  — static radial pools of color in corners
+ *   -2  blob field          — 4 drifting blurred circles with screen blend
+ *   -1  per-section halo    — local glow behind each scene's content
+ * 9999  noise overlay       — 3.5% grain on everything for "film" texture
+ *
+ * Scroll-driven interpolation of blob colors and base hue-rotate is
+ * controlled by bg-scroll.js through CSS custom properties defined
+ * on :root.
+ */
+
+:root {
+    --bg-base: #0a0a0f;
+
+    /* Canonical purple palette used across the landing. RGB triplets
+       so downstream CSS can compose rgba() with arbitrary alpha. */
+    --purple-1: 139, 92, 246;   /* #8b5cf6  main  */
+    --purple-2: 99, 102, 241;   /* #6366f1  indigo */
+    --purple-3: 167, 139, 250;  /* #a78bfa  light */
+    --purple-4: 192, 132, 252;  /* #c084fc  pink-violet accent */
+
+    /* Scroll-driven palette — current interpolated blob colors.
+       Updated at 60fps by bg-scroll.js via requestAnimationFrame. */
+    --scroll-progress: 0;
+    --blob-1-r: 139;
+    --blob-1-g: 92;
+    --blob-1-b: 246;
+    --blob-2-r: 99;
+    --blob-2-g: 102;
+    --blob-2-b: 241;
+    --blob-3-r: 167;
+    --blob-3-g: 139;
+    --blob-3-b: 250;
+    --blob-4-r: 192;
+    --blob-4-g: 132;
+    --blob-4-b: 252;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   LAYER 1 — base mesh gradient
+   Two large soft radial pools in opposite corners plus a subtle
+   vertical lightness curve. Static but hue-rotates with scroll
+   progress to keep the entire base surface tied to the active zone.
+   ───────────────────────────────────────────────────────────────── */
+.bg-base {
+    position: fixed;
+    inset: 0;
+    z-index: -3;
+    background:
+        radial-gradient(ellipse 1400px 900px at 15% 10%,
+            rgba(var(--purple-1), 0.18),
+            transparent 60%),
+        radial-gradient(ellipse 1200px 800px at 85% 90%,
+            rgba(var(--purple-2), 0.15),
+            transparent 60%),
+        linear-gradient(180deg,
+            #0a0a0f 0%,
+            #0c0c14 50%,
+            #0a0a0f 100%);
+    filter: hue-rotate(calc(var(--scroll-progress) * 60deg));
+    transition: filter 0.6s ease-out;
+    pointer-events: none;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   LAYER 2 — drifting blobs
+   Four large blurred circles. Each one is a radial gradient (not a
+   solid circle) so edges fade naturally. Positioned partially off-
+   screen so they feel like light spilling in from outside.
+   mix-blend-mode: screen means overlapping regions brighten — this
+   creates natural "hot-spot" flares without any extra layers.
+   ───────────────────────────────────────────────────────────────── */
+.bg-blobs {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(140px);
+    mix-blend-mode: screen;
+    will-change: transform, background;
+    transition: background 0.8s ease-out;
+}
+
+.blob-1 {
+    width: 55vmax; height: 55vmax;
+    top: -15vmax; left: -15vmax;
+    background: radial-gradient(circle,
+        rgba(var(--blob-1-r), var(--blob-1-g), var(--blob-1-b), 1) 0%,
+        transparent 70%);
+    opacity: 0.55;
+    animation: drift1 32s ease-in-out infinite;
+}
+
+.blob-2 {
+    width: 60vmax; height: 60vmax;
+    bottom: -20vmax; right: -15vmax;
+    background: radial-gradient(circle,
+        rgba(var(--blob-2-r), var(--blob-2-g), var(--blob-2-b), 1) 0%,
+        transparent 70%);
+    opacity: 0.45;
+    animation: drift2 38s ease-in-out infinite;
+}
+
+.blob-3 {
+    width: 45vmax; height: 45vmax;
+    top: 40%; left: 50%;
+    background: radial-gradient(circle,
+        rgba(var(--blob-3-r), var(--blob-3-g), var(--blob-3-b), 1) 0%,
+        transparent 70%);
+    opacity: 0.4;
+    animation: drift3 24s ease-in-out infinite;
+}
+
+.blob-4 {
+    width: 40vmax; height: 40vmax;
+    top: 60%; left: -10vmax;
+    background: radial-gradient(circle,
+        rgba(var(--blob-4-r), var(--blob-4-g), var(--blob-4-b), 1) 0%,
+        transparent 70%);
+    opacity: 0.35;
+    animation: drift4 42s ease-in-out infinite;
+}
+
+/* Different periods ensure blobs never sync — motion always feels
+   organic, never mechanical. */
+@keyframes drift1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33%  { transform: translate(20vmax, 15vmax) scale(1.15); }
+    66%  { transform: translate(-10vmax, 25vmax) scale(0.9); }
+}
+@keyframes drift2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33%  { transform: translate(-25vmax, -20vmax) scale(0.85); }
+    66%  { transform: translate(-10vmax, -30vmax) scale(1.1); }
+}
+@keyframes drift3 {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50%      { transform: translate(-30%, -70%) scale(1.25); }
+}
+@keyframes drift4 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(30vmax, -20vmax) scale(1.1); }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   LAYER 3 — per-section halo
+   Every major section hosts its own soft purple glow that fades in
+   when the section enters the viewport. Keeps focus on the currently
+   visible content and gives each scene a "center of gravity".
+   Applied via JS by toggling .in-view on the section element.
+   ───────────────────────────────────────────────────────────────── */
+.section-halo {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 80%; height: 80%;
+    max-width: 1000px; max-height: 700px;
+    transform: translate(-50%, -50%) scale(0.5);
+    background: radial-gradient(ellipse,
+        rgba(var(--purple-1), 0.35) 0%,
+        rgba(var(--purple-1), 0.15) 30%,
+        transparent 70%);
+    filter: blur(60px);
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.section.in-view .section-halo,
+section.in-view .section-halo {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   LAYER 4 — noise overlay
+   Subtle grain on top of everything. Without it the page reads as
+   "computer generated gradients" — with it, as "film". Inline SVG
+   data URI so there is zero network cost.
+   ───────────────────────────────────────────────────────────────── */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    mix-blend-mode: overlay;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Polish — custom selection and scrollbar.
+   Tiny details that separate a "crafted" site from one "made".
+   ───────────────────────────────────────────────────────────────── */
+::selection {
+    background: rgba(var(--purple-1), 0.4);
+    color: #ffffff;
+}
+
+@media (min-width: 768px) {
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: var(--bg-base); }
+    ::-webkit-scrollbar-thumb {
+        background: rgba(var(--purple-1), 0.3);
+        border-radius: 5px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgba(var(--purple-1), 0.5);
+    }
+}
+
+/* Mobile — fewer blobs and softer blur to keep 60fps on weaker GPUs. */
+@media (max-width: 767px) {
+    .blob-3, .blob-4 { display: none; }
+    .blob { filter: blur(80px); }
+    .section-halo { filter: blur(40px); }
+}
+
+/* Respect users who opted out of motion — blobs stop drifting and
+   all UI transitions collapse to near-instant. */
+@media (prefers-reduced-motion: reduce) {
+    .blob { animation: none; }
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}

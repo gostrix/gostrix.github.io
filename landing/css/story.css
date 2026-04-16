@@ -1,0 +1,328 @@
+/*
+ * landing/css/story.css
+ *
+ * "How it works" story — 7 scenes, each a full 100vh slide with one
+ * screenshot and a short caption. Screenshots alternate: scene 1 has
+ * the shot on the RIGHT, scene 2 on the LEFT, and so on.
+ *
+ * The screenshot is the hero of each scene. Desktop grid is 1fr : 2fr
+ * so the shot gets twice as much horizontal space as the caption.
+ * Each scene has its own tilt angle so the page feels like a stack
+ * of polaroids thrown onto a table, not a spreadsheet of rectangles.
+ *
+ * Also defines:
+ *   - gif-tilt transition block that bridges hero -> story
+ *   - mid-story CTA block that sits after scene 7
+ */
+
+/* ─── Shared section shell ────────────────────────────────────── */
+.scene {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    z-index: 1;
+}
+
+.scene-inner {
+    width: 100%;
+    max-width: 1800px;
+    display: grid;
+    /* Default: caption LEFT (1fr), shot RIGHT (2fr) — this is scene 1. */
+    grid-template-columns: 1fr 2fr;
+    align-items: center;
+    gap: 5rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* HTML order is caption-first, shot-second. That puts the shot on
+   the RIGHT by default (first scene). Even-numbered scenes flip the
+   order so the shot lands on the LEFT — and the grid ratio flips to
+   keep the shot in the big column. */
+.scene .scene-caption { order: 1; }
+.scene .scene-shot    { order: 2; }
+
+.scene:nth-child(even of .scene) .scene-caption { order: 2; }
+.scene:nth-child(even of .scene) .scene-shot    { order: 1; }
+.scene:nth-child(even of .scene) .scene-inner   { grid-template-columns: 2fr 1fr; }
+
+/* ─── Screenshot frame ────────────────────────────────────────── */
+.scene-shot {
+    position: relative;
+}
+
+.scene-shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 18px;
+    border: 1px solid rgba(var(--purple-1), 0.25);
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.4),
+        0 30px 80px rgba(var(--purple-1), 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.04);
+    transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+    opacity: 0;
+}
+
+/* Per-scene tilt — hand-picked angles. Each scene reads slightly
+   different; together they feel organic, not uniform. */
+.scene:nth-of-type(1) .scene-shot img { transform: translateX(60px)  rotate(-2deg); }
+.scene:nth-of-type(2) .scene-shot img { transform: translateX(-60px) rotate(3deg);  }
+.scene:nth-of-type(3) .scene-shot img { transform: translateX(60px)  rotate(-4deg); }
+.scene:nth-of-type(4) .scene-shot img { transform: translateX(-60px) rotate(2deg);  }
+.scene:nth-of-type(5) .scene-shot img { transform: translateX(60px)  rotate(-3deg); }
+.scene:nth-of-type(6) .scene-shot img { transform: translateX(-60px) rotate(2.5deg); }
+.scene:nth-of-type(7) .scene-shot img { transform: translateX(60px)  rotate(0deg);  }
+
+.scene.in-view:nth-of-type(1) .scene-shot img { transform: translateX(0) rotate(-2deg);  opacity: 1; }
+.scene.in-view:nth-of-type(2) .scene-shot img { transform: translateX(0) rotate(3deg);   opacity: 1; }
+.scene.in-view:nth-of-type(3) .scene-shot img { transform: translateX(0) rotate(-4deg);  opacity: 1; }
+.scene.in-view:nth-of-type(4) .scene-shot img { transform: translateX(0) rotate(2deg);   opacity: 1; }
+.scene.in-view:nth-of-type(5) .scene-shot img { transform: translateX(0) rotate(-3deg);  opacity: 1; }
+.scene.in-view:nth-of-type(6) .scene-shot img { transform: translateX(0) rotate(2.5deg); opacity: 1; }
+.scene.in-view:nth-of-type(7) .scene-shot img { transform: translateX(0) rotate(0deg);   opacity: 1; }
+
+/* ─── Caption ─────────────────────────────────────────────────── */
+.scene-caption {
+    padding: 0 1rem;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s,
+                transform 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;
+}
+
+.scene.in-view .scene-caption {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.scene-step {
+    display: inline-block;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+    font-size: 0.75rem;
+    color: rgba(var(--purple-3), 1);
+    letter-spacing: 0.15em;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+}
+
+.scene-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 1.25rem;
+    color: #ffffff;
+}
+
+.scene-title .accent {
+    background: linear-gradient(135deg,
+        rgba(var(--purple-3), 1),
+        rgba(var(--purple-1), 1));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.scene-description {
+    font-size: 1.0625rem;
+    color: rgba(255, 255, 255, 0.65);
+    line-height: 1.7;
+    max-width: 440px;
+}
+
+/* ─── Gif tilt transition — the bridge from hero to story ────── */
+.gif-bridge {
+    position: relative;
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    perspective: 1400px;
+    z-index: 1;
+}
+
+.gif-bridge-frame {
+    width: 100%;
+    max-width: 1100px;
+    position: relative;
+    transform-origin: center center;
+    /* rotateX angle driven at runtime by gif-tilt.js as the user
+       scrolls — here we just give a sensible starting value. */
+    transform: rotateX(-22deg) translateZ(-40px);
+    transition: transform 40ms linear;
+}
+
+.gif-bridge-frame img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
+    border: 1px solid rgba(var(--purple-1), 0.3);
+    box-shadow:
+        0 10px 40px rgba(0, 0, 0, 0.5),
+        0 40px 120px rgba(var(--purple-1), 0.35),
+        0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.gif-bridge-caption {
+    position: absolute;
+    bottom: -3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+/* ─── Mid-story CTA — sits after scene 7 ──────────────────────── */
+.mid-cta {
+    position: relative;
+    padding: 6rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem;
+    z-index: 1;
+}
+
+.mid-cta-heading {
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    text-align: center;
+    max-width: 640px;
+    line-height: 1.3;
+}
+
+.mid-cta-heading .accent {
+    background: linear-gradient(135deg,
+        rgba(var(--purple-4), 1),
+        rgba(var(--purple-1), 1));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.mid-cta-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btn-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 1.75rem;
+    border-radius: 999px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    font-family: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: transform 150ms ease, background 150ms ease,
+                border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.btn-cta svg { width: 16px; height: 16px; }
+
+.btn-cta-primary {
+    background: linear-gradient(135deg,
+        rgba(var(--purple-1), 1),
+        rgba(var(--purple-2), 1));
+    color: #ffffff;
+    box-shadow: 0 10px 30px rgba(var(--purple-1), 0.4);
+}
+
+.btn-cta-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 40px rgba(var(--purple-1), 0.55);
+}
+
+.btn-cta-primary:active { transform: translateY(0); }
+
+.btn-cta-outline {
+    background: rgba(255, 255, 255, 0.04);
+    color: #ffffff;
+    border-color: rgba(var(--purple-1), 0.35);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.btn-cta-outline:hover {
+    background: rgba(var(--purple-1), 0.12);
+    border-color: rgba(var(--purple-1), 0.55);
+    transform: translateY(-2px);
+}
+
+.btn-cta-outline:active { transform: translateY(0); }
+
+/* ─── Mobile story layout ─────────────────────────────────────── */
+@media (max-width: 900px) {
+    .scene { padding: 3rem 1.25rem; }
+
+    .scene-inner,
+    .scene:nth-child(even of .scene) .scene-inner {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        justify-items: center;
+    }
+
+    /* On mobile always: image on top, caption below */
+    .scene .scene-shot,
+    .scene:nth-child(even of .scene) .scene-shot    { order: 1; }
+    .scene .scene-caption,
+    .scene:nth-child(even of .scene) .scene-caption { order: 2; }
+
+    .scene-caption {
+        text-align: center;
+        padding: 0;
+    }
+
+    .scene-description { margin: 0 auto; }
+
+    .scene-shot { margin: 0 auto; max-width: 100%; }
+
+    /* Softer tilt angles on mobile so rotated images don't eat
+       the narrow viewport. */
+    .scene:nth-of-type(1) .scene-shot img,
+    .scene.in-view:nth-of-type(1) .scene-shot img { transform: translateX(0) rotate(-1.5deg); }
+    .scene:nth-of-type(2) .scene-shot img,
+    .scene.in-view:nth-of-type(2) .scene-shot img { transform: translateX(0) rotate(1.5deg); }
+    .scene:nth-of-type(3) .scene-shot img,
+    .scene.in-view:nth-of-type(3) .scene-shot img { transform: translateX(0) rotate(-2deg); }
+    .scene:nth-of-type(4) .scene-shot img,
+    .scene.in-view:nth-of-type(4) .scene-shot img { transform: translateX(0) rotate(1deg); }
+    .scene:nth-of-type(5) .scene-shot img,
+    .scene.in-view:nth-of-type(5) .scene-shot img { transform: translateX(0) rotate(-1.5deg); }
+    .scene:nth-of-type(6) .scene-shot img,
+    .scene.in-view:nth-of-type(6) .scene-shot img { transform: translateX(0) rotate(1.5deg); }
+    .scene:nth-of-type(7) .scene-shot img,
+    .scene.in-view:nth-of-type(7) .scene-shot img { transform: translateX(0) rotate(0deg); }
+
+    /* Off-screen start state — smaller slide distance for mobile. */
+    .scene:not(.in-view):nth-of-type(odd) .scene-shot img  { transform: translateX(20px)  rotate(-2deg); }
+    .scene:not(.in-view):nth-of-type(even) .scene-shot img { transform: translateX(-20px) rotate(2deg); }
+
+    .gif-bridge { min-height: 60vh; }
+    .gif-bridge-frame { transform: rotateX(-15deg) translateZ(-20px); }
+    .mid-cta { padding: 4rem 1.25rem; gap: 2rem; }
+}
+
+@media (max-width: 480px) {
+    .mid-cta-actions { flex-direction: column; width: 100%; }
+    .btn-cta { width: 100%; justify-content: center; }
+}
