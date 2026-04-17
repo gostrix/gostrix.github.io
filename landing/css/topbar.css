@@ -84,6 +84,33 @@
     background: rgba(var(--purple-1), 0.12);
 }
 
+/* Persistent Install action — filled purple pill, always visible
+   (desktop and mobile). Sits between the nav and the star badge on
+   desktop; on mobile it's the only right-side anchor point for
+   "just get me to install" users. */
+.topbar-install {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.45rem 0.95rem;
+    background: linear-gradient(135deg,
+        rgba(var(--purple-1), 1),
+        rgba(var(--purple-2), 1));
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #ffffff;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(var(--purple-1), 0.35);
+    transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.topbar-install:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(var(--purple-1), 0.5);
+}
+
+.topbar-install:active { transform: translateY(0); }
+
 /* GitHub star badge. Count is injected at runtime by github-stars.js.
    Falls back to placeholder "—" if the API call fails. */
 .topbar-star {
@@ -131,4 +158,8 @@
     .topbar-nav { display: none; }
     .topbar-wordmark { font-size: 0.875rem; }
     .topbar-brand svg { width: 22px; height: 22px; }
+    .topbar-install {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.75rem;
+    }
 }
