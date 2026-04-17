@@ -62,4 +62,28 @@ export function initGifTilt() {
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     tick(frame);
+
+    // Reveal the gif only after it has actually decoded. Until then
+    // the <img> stays hidden and a shimmering placeholder fills the
+    // frame (CSS skeleton). Once decoding finishes both the frame
+    // and the img get .loaded — the skeleton fades out and the gif
+    // rides into place with its own transition.
+    var img = frame.querySelector('img');
+    if (!img) return;
+
+    function reveal() {
+        frame.classList.add('loaded');
+        img.classList.add('loaded');
+    }
+
+    if (img.complete && img.naturalWidth > 0) {
+        reveal();
+    } else {
+        img.addEventListener('load', reveal, { once: true });
+        // Safety — don't leave the skeleton spinning forever if the
+        // network hangs. Eight seconds is generous; anything longer
+        // and the visit is probably lost already.
+        img.addEventListener('error', reveal, { once: true });
+        setTimeout(reveal, 8000);
+    }
 }

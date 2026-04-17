@@ -16,9 +16,20 @@
 
     <link rel="icon" type="image/png" href="https://github.com/eduard256/Strix/releases/download/v2.0.0/icon-192.png">
 
+    <!-- Display + mono fonts. Satoshi is the headline voice; Geist Mono
+         is used for UI chrome (trust-bar numbers, terminal peek, eyebrow
+         tag). Loaded from Fontshare / Google with display=swap so the
+         hero never renders blank while they fetch. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@700,600,500,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
     <!-- Landing styles. Each file owns one visual zone of the page. -->
     <link rel="stylesheet" href="landing/css/bg.css">
     <link rel="stylesheet" href="landing/css/topbar.css">
+    <link rel="stylesheet" href="landing/css/hero.css">
     <link rel="stylesheet" href="landing/css/story.css">
     <link rel="stylesheet" href="landing/css/install.css">
     <link rel="stylesheet" href="landing/css/end.css">
@@ -105,10 +116,108 @@
 
 
 <!-- ══════════════════════════════════════════════════════════════
-     HERO — to be rebuilt from scratch. The section wrapper is kept
-     so that #hero anchors in the topbar and footer still resolve.
+     HERO — premium SaaS layout: eyebrow tag, three-line headline,
+     sub-copy, primary install CTA + Home Assistant deep-link,
+     trust-bar, and a pair of floating probe-scan cards on desktop.
      ═════════════════════════════════════════════════════════════ -->
-<section id="hero" class="hero section"></section>
+<section id="hero" class="hero section">
+    <div class="section-halo"></div>
+
+    <!-- Floating terminal peek — desktop decoration above the fold.
+         Simulates a live probe run to make the product feel alive
+         inside the hero itself. Hidden by CSS below 960px. -->
+    <aside class="hero-peek" aria-hidden="true">
+        <div class="hero-peek-head">
+            <span class="hero-peek-head-dot"></span>
+            <span>PROBING · 192.168.1.42</span>
+        </div>
+        <div class="hero-peek-lines">
+            <div class="hero-peek-line"><span class="hero-peek-arrow">&gt;</span> port <span class="hero-peek-value">554</span> open</div>
+            <div class="hero-peek-line"><span class="hero-peek-arrow">&gt;</span> vendor <span class="hero-peek-value">Hikvision</span></div>
+            <div class="hero-peek-line"><span class="hero-peek-arrow">&gt;</span> mDNS <span class="hero-peek-value">found</span></div>
+            <div class="hero-peek-line"><span class="hero-peek-arrow">&gt;</span> testing <span class="hero-peek-value">614</span> URLs</div>
+            <div class="hero-peek-line"><span class="hero-peek-arrow">&gt;</span> <span class="hero-peek-ok">✓ 4 alive streams</span></div>
+        </div>
+    </aside>
+
+    <aside class="hero-peek-sub" aria-hidden="true">
+        <div class="hero-peek-sub-row">
+            <span class="hero-peek-badge alive">ALIVE</span>
+            <span class="hero-peek-sub-label">rtsp · 1080p · 87ms</span>
+        </div>
+        <div class="hero-peek-sub-row">
+            <span class="hero-peek-badge main">MAIN</span>
+            <span class="hero-peek-sub-label">h264 / 15 fps</span>
+        </div>
+    </aside>
+
+    <div class="hero-inner">
+        <div class="hero-eyebrow">
+            <span class="hero-eyebrow-dot"></span>
+            Camera discovery · Frigate-ready
+        </div>
+
+        <h1 class="hero-title">
+            <span class="hero-title-line">Any camera.</span>
+            <span class="hero-title-line">
+                Even <span class="hero-title-accent">the forgotten</span> ones.
+            </span>
+            <span class="hero-title-line">Ready for Frigate.</span>
+        </h1>
+
+        <p class="hero-sub">
+            Strix finds every possible stream URL on your camera, tests them all,
+            and drops the working ones straight into <strong>Frigate</strong> &mdash;
+            even on old gear nothing else can touch.
+        </p>
+
+        <div class="hero-ctas">
+            <div class="hero-install" role="group" aria-label="Install command">
+                <span class="hero-install-cmd" title="bash <(curl -fsSL https://raw.githubusercontent.com/eduard256/Strix/main/install.sh)">
+                    <span class="prompt">$</span>bash &lt;(curl -fsSL …/install.sh)
+                </span>
+                <button class="hero-install-copy"
+                        data-copy="bash <(curl -fsSL https://raw.githubusercontent.com/eduard256/Strix/main/install.sh)"
+                        aria-label="Copy install command">
+                    <svg viewBox="0 0 16 16" fill="none">
+                        <rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
+                        <path d="M3 11V3h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+
+            <a class="hero-ha"
+               href="https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Feduard256%2Fhassio-strix"
+               target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 2.8L3.2 11.5v8.9c0 .5.4.9.9.9h4.6v-6.8h6.6v6.8h4.6c.5 0 .9-.4.9-.9v-8.9L12 2.8z"/>
+                </svg>
+                Add to Home Assistant
+            </a>
+        </div>
+
+        <div class="hero-trust" role="list">
+            <div class="hero-trust-item" role="listitem">
+                <span class="hero-trust-num">3,600</span>
+                <span>brands</span>
+            </div>
+            <span class="hero-trust-sep" aria-hidden="true">·</span>
+            <div class="hero-trust-item" role="listitem">
+                <span class="hero-trust-num">100,000+</span>
+                <span>stream URLs</span>
+            </div>
+            <span class="hero-trust-sep" aria-hidden="true">·</span>
+            <div class="hero-trust-item" role="listitem">
+                <span class="hero-trust-num">20</span>
+                <span>parallel workers</span>
+            </div>
+            <span class="hero-trust-sep" aria-hidden="true">·</span>
+            <div class="hero-trust-item" role="listitem">
+                <span>MIT · Self-hosted</span>
+            </div>
+        </div>
+    </div>
+</section>
 
 
 <!-- ══════════════════════════════════════════════════════════════
