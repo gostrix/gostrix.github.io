@@ -13,11 +13,10 @@
 
 .manifesto {
     position: relative;
-    min-height: 80vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 6rem 2rem;
+    padding: 3rem 2rem 1.5rem;
     z-index: 1;
     text-align: center;
 }
@@ -53,7 +52,7 @@
 /* ─── Install section shell ───────────────────────────────────── */
 .install {
     position: relative;
-    padding: 6rem 1.5rem;
+    padding: 2rem 1.5rem 6rem;
     z-index: 1;
 }
 
