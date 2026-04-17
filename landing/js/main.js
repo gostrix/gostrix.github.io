@@ -16,7 +16,6 @@ import { initGifTilt }       from './gif-tilt.js';
 import { initCopy }          from './copy-command.js';
 import { initStars }         from './github-stars.js';
 import { initInstallTabs }   from './install-tabs.js';
-import { initWordTicker }    from './word-ticker.js';
 
 function start() {
     initBgScroll();
@@ -24,7 +23,6 @@ function start() {
     initGifTilt();
     initCopy();
     initInstallTabs();
-    initWordTicker();
     // Star badge is async — don't let it block the rest.
     initStars();
 }

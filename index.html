@@ -19,7 +19,6 @@
     <!-- Landing styles. Each file owns one visual zone of the page. -->
     <link rel="stylesheet" href="landing/css/bg.css">
     <link rel="stylesheet" href="landing/css/topbar.css">
-    <link rel="stylesheet" href="landing/css/hero.css">
     <link rel="stylesheet" href="landing/css/story.css">
     <link rel="stylesheet" href="landing/css/install.css">
     <link rel="stylesheet" href="landing/css/end.css">
@@ -106,57 +105,10 @@
 
 
 <!-- ══════════════════════════════════════════════════════════════
-     HERO — manifesto headline + install pill
+     HERO — to be rebuilt from scratch. The section wrapper is kept
+     so that #hero anchors in the topbar and footer still resolve.
      ═════════════════════════════════════════════════════════════ -->
-<section id="hero" class="hero section">
-    <div class="section-halo"></div>
-
-    <div class="hero-inner">
-        <h1 class="hero-title">
-            <!-- Slot-machine ticker: static "Your" label on the left,
-                 vertical cylinder of interchangeable words on the
-                 right. Auto-advances every 1.5s and can be dragged
-                 vertically by the user like a combination-lock
-                 cylinder. -->
-            <span class="ticker-label">Your</span>
-            <span class="ticker"
-                  role="listbox"
-                  aria-roledescription="slot machine"
-                  aria-label="Browse through what Strix keeps yours">
-                <span class="ticker-fade"></span>
-                <span class="ticker-cylinder" id="hero-ticker">
-                    <!-- Filled by word-ticker.js. Kept empty here so
-                         the list is only maintained in one place. -->
-                </span>
-            </span>
-        </h1>
-
-        <div class="hero-install" role="group" aria-label="Install command">
-            <span class="hero-install-cmd" title="bash <(curl -fsSL https://raw.githubusercontent.com/eduard256/Strix/main/install.sh)">
-                <span class="prompt">$</span>bash &lt;(curl -fsSL …/install.sh)
-            </span>
-            <button class="hero-install-copy"
-                    data-copy="bash <(curl -fsSL https://raw.githubusercontent.com/eduard256/Strix/main/install.sh)"
-                    aria-label="Copy install command">
-                <svg viewBox="0 0 16 16" fill="none">
-                    <rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
-                    <path d="M3 11V3h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                </svg>
-            </button>
-        </div>
-
-        <!-- Platform chips — each anchors to the Install section and
-             pre-selects its own tab via data-install-tab read by
-             install-tabs.js on page load and hashchange. -->
-        <p class="hero-compat">
-            Runs on
-            <a href="#install" data-install-tab="linux">Linux</a> ·
-            <a href="#install" data-install-tab="linux">Proxmox</a> ·
-            <a href="#install" data-install-tab="docker">Docker</a> ·
-            <a href="#install" data-install-tab="ha">Home Assistant</a>
-        </p>
-    </div>
-</section>
+<section id="hero" class="hero section"></section>
 
 
 <!-- ══════════════════════════════════════════════════════════════
