@@ -329,12 +329,14 @@
     user-select: none;
 }
 
-/* ─── Floating probe card (desktop decoration) ──────────────── */
-/* Gives the hero a live product peek. A mini terminal that shows
-   a fake probe scan running. Hidden on mobile — small screens
-   cannot afford this complexity without losing legibility.        */
-.hero-peek {
-    display: none;  /* shown at desktop breakpoint below */
+/* ─── Floating probe cards (desktop decoration) ───────────────
+   Both floating cards hidden on phones — the hero is already dense
+   on a narrow screen, and a leaked aside underneath would read as
+   loose text instead of a framed peek. The desktop breakpoint below
+   re-enables them with their real layout.                          */
+.hero-peek,
+.hero-peek-sub {
+    display: none;
 }
 
 /* ─── Entrance keyframes ─────────────────────────────────────── */
