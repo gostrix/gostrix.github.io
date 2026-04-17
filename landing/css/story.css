@@ -378,25 +378,14 @@
     .scene:not(.in-view):nth-of-type(odd) .scene-shot img  { transform: translateX(20px)  rotate(-2deg); }
     .scene:not(.in-view):nth-of-type(even) .scene-shot img { transform: translateX(-20px) rotate(2deg); }
 
-    /* Mobile gif strategy — make it feel BIG. The frame blows out
-       past the viewport (~170% of the screen wide) so the gif
-       dominates the fold even on a narrow phone. Shoulders of the
-       gif bleed off both edges — it's intentional, a visual hook
-       that tells the user "there's more product than the phone
-       can show". Tilt softens because heavy rotateX on a narrow
-       frame folds the gif into itself. */
-    .gif-bridge {
-        min-height: 55vh;
-        padding: 1rem 0;
-        overflow: visible;
-    }
-    .gif-bridge-frame {
-        width: 170vw;
-        max-width: 170vw;
-        margin-left: -35vw;
-        transform: rotateX(-10deg) translateZ(-10px);
-    }
-    .gif-bridge-frame img { border-radius: 14px; }
+    /* Mobile gif — matches the desktop behaviour: contained to the
+       viewport, softened tilt. Kept the earlier "bleed past the
+       edges" experiment in git history; it felt cinematic on iPhone
+       Pro but broke centering on narrow Androids. Fitting the gif
+       inside the viewport is the safer, calmer choice. */
+    .gif-bridge { min-height: 60vh; }
+    .gif-bridge-frame { transform: rotateX(-15deg) translateZ(-20px); }
+    .gif-bridge-frame img { border-radius: 16px; }
     .gif-bridge-caption { font-size: 0.75rem; bottom: -2.25rem; }
     .mid-cta { padding: 4rem 1.25rem; gap: 2rem; }
 }
