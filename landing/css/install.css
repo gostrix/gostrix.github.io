@@ -259,6 +259,34 @@
 
 .ha-install-btn svg { width: 18px; height: 18px; }
 
+/* Umbrel badge — uses the official SVG from apps.umbrel.com so it
+   stays visually consistent with other Umbrel marketing material.
+   Just center it and add a subtle lift on hover. */
+.umbrel-install-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem 0;
+    margin-top: 0.5rem;
+    text-decoration: none;
+    transition: transform 150ms ease, filter 150ms ease;
+}
+
+.umbrel-install-btn img {
+    display: block;
+    height: 64px;
+    width: auto;
+    filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.35));
+}
+
+.umbrel-install-btn:hover {
+    transform: translateY(-2px);
+}
+
+.umbrel-install-btn:hover img {
+    filter: drop-shadow(0 14px 32px rgba(0, 0, 0, 0.45));
+}
+
 .install-panel ol {
     list-style: none;
     counter-reset: step;
@@ -378,4 +406,6 @@
     .terminal-copy { width: 30px; height: 30px; top: 0.5rem; right: 0.5rem; }
 
     .ha-install-btn { width: 100%; justify-content: center; }
+    .umbrel-install-btn { width: 100%; }
+    .umbrel-install-btn img { height: 56px; margin: 0 auto; }
 }

@@ -422,7 +422,9 @@
             <button class="install-tab active" role="tab">Linux / Proxmox</button>
             <button class="install-tab" role="tab">Docker</button>
             <button class="install-tab" role="tab">Docker Compose</button>
+            <button class="install-tab" role="tab">Podman</button>
             <button class="install-tab" role="tab">Home Assistant</button>
+            <button class="install-tab" role="tab">Umbrel</button>
             <button class="install-tab" role="tab">Binary</button>
         </div>
 
@@ -524,7 +526,28 @@ docker compose -f docker-compose.go2rtc.yml up -d"
                 </div>
             </div>
 
-            <!-- PANEL 4 — Home Assistant Add-on -->
+            <!-- PANEL 4 — Podman -->
+            <div class="install-panel" data-label="Podman" data-tab="podman">
+                <p class="install-panel-desc">
+                    Podman drops <code>NET_RAW</code> and <code>NET_ADMIN</code> by default.
+                    Strix needs them for network scanning, so add them explicitly.
+                </p>
+                <div class="terminal">
+                    <button class="terminal-copy"
+                            data-copy="podman run -d --name strix --network host --cap-add=NET_RAW --cap-add=NET_ADMIN --restart unless-stopped eduard256/strix:latest"
+                            aria-label="Copy command">
+                        <svg viewBox="0 0 16 16" fill="none">
+                            <rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
+                            <path d="M3 11V3h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                    <div class="terminal-line"><span class="prompt">$</span>podman run -d --name strix --network host \</div>
+                    <div class="terminal-line"><span class="prompt">&nbsp;</span>&nbsp;&nbsp;--cap-add=NET_RAW --cap-add=NET_ADMIN \</div>
+                    <div class="terminal-line"><span class="prompt">&nbsp;</span>&nbsp;&nbsp;--restart unless-stopped eduard256/strix:latest</div>
+                </div>
+            </div>
+
+            <!-- PANEL 5 — Home Assistant Add-on -->
             <div class="install-panel" data-label="Home Assistant" data-tab="ha">
                 <p class="install-panel-desc">
                     One-click repository add, then install from the add-on store.
@@ -544,7 +567,23 @@ docker compose -f docker-compose.go2rtc.yml up -d"
                 </a>
             </div>
 
-            <!-- PANEL 5 — Binary -->
+            <!-- PANEL 6 — Umbrel -->
+            <div class="install-panel" data-label="Umbrel" data-tab="umbrel">
+                <p class="install-panel-desc">
+                    One-click install from the Umbrel App Store. No config needed, runs
+                    on your home server alongside the rest of your Umbrel apps.
+                </p>
+                <a class="umbrel-install-btn"
+                   href="https://apps.umbrel.com/app/strix"
+                   target="_blank" rel="noopener"
+                   aria-label="Install on Umbrel">
+                    <img src="https://apps.umbrel.com/api/app/strix/badge-light.svg"
+                         alt="Install on Umbrel"
+                         height="64">
+                </a>
+            </div>
+
+            <!-- PANEL 7 — Binary -->
             <div class="install-panel" data-label="Binary" data-tab="binary">
                 <p class="install-panel-desc">
                     Download from <a href="https://github.com/eduard256/Strix/releases" target="_blank" rel="noopener">GitHub Releases</a> (Linux amd64 / arm64).
